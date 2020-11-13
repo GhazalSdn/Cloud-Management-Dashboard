@@ -9,11 +9,10 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard(cloud computing)</title>
+    <title>Dashboard(Cloud Computing)</title>
 </head>
 
 <body>
-
 
     <div class="model">
         <div class="main-container">            
@@ -21,14 +20,38 @@
                 <h1>
                 </h1>
                 <p class="text">
+
+                </p>
+                <p class="text">
                 <form  class="form" method="post">
-                        <div><input placeholder="VM name:" type="text" name="vm" id="vm"></input></div>
-                        <div><textarea placeholder="command" rows="6" cols="50" name="message" id="message"></textarea></div>
-                        <input type="submit" name="getVMs" id="getVMs" value="getVMs" /><br/>
+                        <?php
+
+
+                        $list = array("vm1", "two", "three");
+                        // $list= exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
+                        echo '<select name="selectedVM">';
+                        foreach($list as $select => $row){
+                        echo '<option value=' . $row . '>' . $row . '</option>';
+                        }
+                        echo '</select>';
+
+                        // // $runnigVMs= exec('sh resources/scripts/listVMs.sh');
+                        //  $runnigVMs= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
+                        // echo '<pre>'.$runnigVMs.'</pre>'
+                        //     // shell_exec('sh resources/scripts/startVM.sh');
+                        // echo exec('whoami');
+                        ?>
+                        <div><textarea placeholder="Command:" rows="6" cols="50" name="message" id="message"></textarea></div>
+                        <input type="submit" name="getVMs" id="getVMs" value="Execute Command" /><br/>
+                        <input type="submit" name="startVM" id="startVM" value="Start VM" /><br/>
+                        <input type="submit" name="stopVM" id="stopVM" value="Stop VM" /><br/>
+                        <input type="submit" name="cloneVM" id="cloneVM" value="Clone VM" /><br/>
                 </form>
                     
                     
                 </p>
+
+
                 
             </div>
 
@@ -44,9 +67,14 @@
                     function testfun()
                     {
                         $command = $_POST['message'];
-                        $vm = $_POST['vm'];
+                        $vm = $_POST['selectedVM'];
+                        // $vm = $_POST['vm'];
                         if($vm == 'vm1'){
                             $pass='12345';
+                        }
+                        if($vm==''){
+                            $pass='';
+
                         }
                         
                         
@@ -54,14 +82,25 @@
                         if (!$ssh->login($vm , $pass)) {
                             exit('Login Failed');
                         }
-                        
-                        echo $ssh->exec($command);
+                        $commandRes = $ssh->exec($command);
+                        echo '<pre>'.$commandRes.'</pre>';
                     }
                     
                     if(array_key_exists('getVMs',$_POST)){
                        testfun();
 
                     }
+                    if(isset($_POST['startVM'])) { 
+                        $vm = $_POST['selectedVM'];
+                        exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm '. $vm);
+                        
+                    }
+                    if(isset($_POST['stopVM'])) { 
+                        $vm = $_POST['selectedVM'];
+                        $runnigVMs= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage controlvm '.$vm.' poweroff');
+                        echo '<pre>'.$runnigVMs.'</pre>';
+                    }
+                    
                     
                     ?></p>
             </div>

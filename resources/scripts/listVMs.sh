@@ -1,4 +1,4 @@
 #! /bin/bash
-for machine in $(VBoxManage list runningvms|cut -d" " -f 1); do
+for machine in $(VBoxManage list vms|cut -d" " -f 1); do
   echo "$machine"
 done
