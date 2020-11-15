@@ -24,23 +24,16 @@
                 </p>
                 <p class="text">
                 <form  class="form" method="post">
-                        <?php
-                        $list= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
-                        
-                        preg_match_all("~\"(.*?)\"~",$list,$listvm);
-                        $listvm = ($listvm[1]);
-                        echo '<select name="selectedVM">';
-                        foreach($listvm as $select => $row){
-                        echo '<option value=' . $row . '>' . $row . '</option>';
-                        }
-                        echo '</select>';
-                        ?>
+                        <!-- <select name="selectedVM" id="selectedVM"></select> -->
+                        <div id="selectedVM" class="listOfVM"> SELECT VM:  </div>
                         <div><textarea placeholder="Command:" rows="6" cols="50" name="message" id="message"></textarea></div>
                         <input type="submit" name="getVMs" id="getVMs" value="Execute Command" /><br/>
                         <input type="submit" name="startVM" id="startVM" value="Start VM" /><br/>
                         <input type="submit" name="stopVM" id="stopVM" value="Stop VM" /><br/>
-                        <input type="submit" name="cloneVM" id="cloneVM" value="Clone VM" /><br/>
                         <input type="submit" name="removeVM" id="removeVM" value="Remove VM" /><br/>
+                        <input type="submit" name="cloneVM" id="cloneVM" value="Clone VM" /><br/>
+
+                        
                 </form>
                     
                     
@@ -86,7 +79,8 @@
                     }
                     if(isset($_POST['cloneVM'])) { 
                         $vm = $_POST['selectedVM'];
-                        $cloneVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage clonevm '.$vm.' --name clone'.$vm.' --register' );
+
+                        $cloneVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage clonevm '.$vm.' --name clone-'.rand(1,30).$vm.' --register' );
                         echo '<pre>'.$cloneVM.'</pre>';
                     }
                     if(isset($_POST['removeVM'])) { 
@@ -107,8 +101,61 @@
         
 
 
-</body>
+    <script type="text/javascript">
+    
+                
 
+    var allVMs = <?php 
+        $choicelist= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
+        preg_match_all("~\"(.*?)\"~",$choicelist,$listchoicevm);
+        $listchoicevm = ($listchoicevm[1]);
+        echo json_encode($listchoicevm);
+    ?>;
+    
+
+    var runningVMs = <?php 
+        $choicelistrun= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list runningvms');
+        preg_match_all("~\"(.*?)\"~",$choicelistrun,$listchoicevmrun);
+        $listchoicevmrun = ($listchoicevmrun[1]);
+        echo json_encode($listchoicevmrun);
+    ?>;
+
+    var common = allVMs.filter(value => runningVMs.includes(value));
+    var allVMs=allVMs.filter(val => !runningVMs.includes(val));
+    var sel = document.getElementById('selectedVM');
+    
+    for(var i = 0; i < allVMs.length; i++) {
+    var newDiv = document.createElement('div');
+    newDiv.className += "eachVM";
+    sel.appendChild(newDiv);
+    var label = document.createElement('label');
+    label.className += "red";
+    label.innerHTML = allVMs[i];
+    var opt = document.createElement('input');
+    opt.type="radio";
+    opt.name="selectedVM";
+    opt.value = allVMs[i];
+    newDiv.appendChild(opt);
+    newDiv.appendChild(label);
+    }       
+
+    for(var i = 0; i < common.length; i++) {
+    var newDiv = document.createElement('div');
+    newDiv.className += "eachVM";
+    sel.appendChild(newDiv);
+    var label = document.createElement('label');
+    label.className += "green";
+    label.innerHTML = common[i];
+    var opt = document.createElement('input');
+    opt.type="radio";
+    opt.name="selectedVM";
+    opt.value = common[i];
+    newDiv.appendChild(opt);
+    newDiv.appendChild(label);
+    }     
+
+</script>
+</body>
 
 
 

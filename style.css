@@ -38,7 +38,32 @@
   align-items: left;
   
 }
+.listOfVM{
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+.red{
+  font-weight: normal;
+  background-color: rgba(211, 24, 24, 0.822);
+  color: white;
+  border-radius: 10%;
+  
+}
+.green{
+  font-weight: normal;
+  background-color: rgb(158, 216, 119);
+  color: white;
+  border-radius: 0.3em;
+  
+}
 
+.eachVM{
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+}
 
 .model h1 {
   display: flex; 
