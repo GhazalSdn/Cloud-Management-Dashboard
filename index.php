@@ -15,16 +15,19 @@
 <body>
 
     <div class="model">
-        <div class="main-container">            
+
+        <div class="main-container">    
             <div class="content">
-                <h1>
-                </h1>
+            <button class="refresh" onClick="window.location.reload();">Refresh</button>        
+
+                <h2 class="name">
+                    VirtualBox Dashboard
+                </h2>
                 <p class="text">
 
                 </p>
                 <p class="text">
                 <form  class="form" method="post">
-                        <!-- <select name="selectedVM" id="selectedVM"></select> -->
                         <div id="selectedVM" class="listOfVM"> SELECT VM:  </div>
                         <div><textarea placeholder="Command:" rows="6" cols="50" name="message" id="message"></textarea></div>
                         <input type="submit" name="getVMs" id="getVMs" value="Execute Command" /><br/>

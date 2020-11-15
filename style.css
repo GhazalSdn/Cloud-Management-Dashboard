@@ -9,6 +9,7 @@
 }
 
 .main-container {
+  color: rgb(6, 94, 97);
   display: flex;
   flex-direction: row;
   position: relative;
@@ -25,7 +26,20 @@
   -ms-border-radius: 1em;
   -o-border-radius: 1em;
 }
+.refresh{
+  font-size: x-small;
+  font-weight: bold;
+  background-color: #d1e4a7;
+  color: rgb(6, 94, 97);
+  border-color: rgb(6, 94, 97);
+  border-radius: 0.5em;
+margin-right: 100%;
 
+}
+.name{
+  color: rgb(6, 94, 97);
+  font-weight: bolder;
+}
 .content{
   display: flex;
   flex-direction: column;
