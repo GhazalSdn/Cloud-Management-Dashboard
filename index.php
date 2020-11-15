@@ -25,9 +25,6 @@
                 <p class="text">
                 <form  class="form" method="post">
                         <?php
-
-
-                        // $list = array("vm1", "two", "three");
                         $list= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
                         
                         preg_match_all("~\"(.*?)\"~",$list,$listvm);
@@ -43,7 +40,7 @@
                         <input type="submit" name="startVM" id="startVM" value="Start VM" /><br/>
                         <input type="submit" name="stopVM" id="stopVM" value="Stop VM" /><br/>
                         <input type="submit" name="cloneVM" id="cloneVM" value="Clone VM" /><br/>
-                        <div><input type="text" name="txtSearch" value="" size="20" maxlength="64" /></div>
+                        <input type="submit" name="removeVM" id="removeVM" value="Remove VM" /><br/>
                 </form>
                     
                     
@@ -59,53 +56,43 @@
                 Result
                 </h3>
                 <p class="text" id="res"><?php
-                        // require __DIR__ . '/vendor/autoload.php';
-                        // use phpseclib\Net\SSH2;
 
-                    function testfun()
-                    {
+                    
+                    if(isset($_POST['getVMs'])){
                         $command = $_POST['message'];
                         $vm = $_POST['selectedVM'];
-                        // $vm = $_POST['vm'];
+
                         if($vm == 'VM1'){
                             $vmUser='vm1';
-                            // $pass='';
+                            $ip="192.168.1.6";
                         }
                         if($vm==''){
-                            // $pass='';
-
                         }
-                        
-                        
-                        // $ssh = new SSH2('192.168.1.6');
-                        // if (!$ssh->login($vm , $pass)) {
-                        //     exit('Login Failed');
-                        // }
-                        // $commandRes = $ssh->exec($command);
-                        $commandRes=shell_exec("ssh ".$vmUser."@192.168.1.6 ".$command);
-
-
-                        
+                        $commandRes=shell_exec("ssh ".$vmUser."@".$ip." ".$command);
                         echo '<pre>'.$commandRes.'</pre>';
-                    }
-                    
-                    if(array_key_exists('getVMs',$_POST)){
-                       testfun();
 
                     }
+
                     if(isset($_POST['startVM'])) { 
                         $vm = $_POST['selectedVM'];
-                        exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm '. $vm);
+                        $startVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm '. $vm);
+                        echo '<pre>'.$startVM.'</pre>';
                         
                     }
                     if(isset($_POST['stopVM'])) { 
                         $vm = $_POST['selectedVM'];
-                        shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage controlvm '.$vm.' poweroff');
+                        $stopVM=shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage controlvm '.$vm.' poweroff');
+                        echo '<pre>'.$stopVM.'</pre>';
                     }
                     if(isset($_POST['cloneVM'])) { 
                         $vm = $_POST['selectedVM'];
                         $cloneVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage clonevm '.$vm.' --name clone'.$vm.' --register' );
                         echo '<pre>'.$cloneVM.'</pre>';
+                    }
+                    if(isset($_POST['removeVM'])) { 
+                        $vm = $_POST['selectedVM'];
+                        $removeVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage unregistervm --delete '.$vm);
+                        echo '<pre>'.$removeVM.'</pre>';
                     }
                     
                     
