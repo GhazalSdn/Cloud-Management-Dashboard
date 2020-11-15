@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <!-- <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'> -->
     <link rel="stylesheet" href="Normalize.css">
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
@@ -27,25 +27,23 @@
                         <?php
 
 
-                        $list = array("vm1", "two", "three");
-                        // $list= exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
+                        // $list = array("vm1", "two", "three");
+                        $list= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
+                        
+                        preg_match_all("~\"(.*?)\"~",$list,$listvm);
+                        $listvm = ($listvm[1]);
                         echo '<select name="selectedVM">';
-                        foreach($list as $select => $row){
+                        foreach($listvm as $select => $row){
                         echo '<option value=' . $row . '>' . $row . '</option>';
                         }
                         echo '</select>';
-
-                        // // $runnigVMs= exec('sh resources/scripts/listVMs.sh');
-                        //  $runnigVMs= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms');
-                        // echo '<pre>'.$runnigVMs.'</pre>'
-                        //     // shell_exec('sh resources/scripts/startVM.sh');
-                        // echo exec('whoami');
                         ?>
                         <div><textarea placeholder="Command:" rows="6" cols="50" name="message" id="message"></textarea></div>
                         <input type="submit" name="getVMs" id="getVMs" value="Execute Command" /><br/>
                         <input type="submit" name="startVM" id="startVM" value="Start VM" /><br/>
                         <input type="submit" name="stopVM" id="stopVM" value="Stop VM" /><br/>
                         <input type="submit" name="cloneVM" id="cloneVM" value="Clone VM" /><br/>
+                        <div><input type="text" name="txtSearch" value="" size="20" maxlength="64" /></div>
                 </form>
                     
                     
@@ -61,28 +59,33 @@
                 Result
                 </h3>
                 <p class="text" id="res"><?php
-                        require __DIR__ . '/vendor/autoload.php';
-                        use phpseclib\Net\SSH2;
+                        // require __DIR__ . '/vendor/autoload.php';
+                        // use phpseclib\Net\SSH2;
 
                     function testfun()
                     {
                         $command = $_POST['message'];
                         $vm = $_POST['selectedVM'];
                         // $vm = $_POST['vm'];
-                        if($vm == 'vm1'){
-                            $pass='12345';
+                        if($vm == 'VM1'){
+                            $vmUser='vm1';
+                            // $pass='';
                         }
                         if($vm==''){
-                            $pass='';
+                            // $pass='';
 
                         }
                         
                         
-                        $ssh = new SSH2('192.168.1.6');
-                        if (!$ssh->login($vm , $pass)) {
-                            exit('Login Failed');
-                        }
-                        $commandRes = $ssh->exec($command);
+                        // $ssh = new SSH2('192.168.1.6');
+                        // if (!$ssh->login($vm , $pass)) {
+                        //     exit('Login Failed');
+                        // }
+                        // $commandRes = $ssh->exec($command);
+                        $commandRes=shell_exec("ssh ".$vmUser."@192.168.1.6 ".$command);
+
+
+                        
                         echo '<pre>'.$commandRes.'</pre>';
                     }
                     
@@ -97,8 +100,12 @@
                     }
                     if(isset($_POST['stopVM'])) { 
                         $vm = $_POST['selectedVM'];
-                        $runnigVMs= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage controlvm '.$vm.' poweroff');
-                        echo '<pre>'.$runnigVMs.'</pre>';
+                        shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage controlvm '.$vm.' poweroff');
+                    }
+                    if(isset($_POST['cloneVM'])) { 
+                        $vm = $_POST['selectedVM'];
+                        $cloneVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage clonevm '.$vm.' --name clone'.$vm.' --register' );
+                        echo '<pre>'.$cloneVM.'</pre>';
                     }
                     
                     
