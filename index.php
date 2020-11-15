@@ -57,13 +57,8 @@
                     if(isset($_POST['getVMs'])){
                         $command = $_POST['message'];
                         $vm = $_POST['selectedVM'];
-
-                        if($vm == 'VM1'){
-                            $vmUser='vm1';
-                            $ip="192.168.1.6";
-                        }
-                        if($vm==''){
-                        }
+                        $vmUser='vm1';
+                        $ip="192.168.1.6";
                         $commandRes=shell_exec("ssh ".$vmUser."@".$ip." ".$command);
                         echo '<pre>'.$commandRes.'</pre>';
 
