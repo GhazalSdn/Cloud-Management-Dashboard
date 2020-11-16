@@ -9,6 +9,8 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+                <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <title>Dashboard(Cloud Computing)</title>
 </head>
 
@@ -30,11 +32,11 @@
                 <form  class="form" method="post">
                         <div id="selectedVM" class="listOfVM"> SELECT VM:  </div>
                         <div><textarea placeholder="Command:" rows="6" cols="50" name="message" id="message"></textarea></div>
-                        <input type="submit" name="getVMs" id="getVMs" value="Execute Command" /><br/>
-                        <input type="submit" name="startVM" id="startVM" value="Start VM" /><br/>
-                        <input type="submit" name="stopVM" id="stopVM" value="Stop VM" /><br/>
-                        <input type="submit" name="removeVM" id="removeVM" value="Remove VM" /><br/>
-                        <input type="submit" name="cloneVM" id="cloneVM" value="Clone VM" /><br/>
+                        <button type="submit" name="getVMs" id="getVMs" ><i class="fa fa-play"></i> Execute Command</button><br/>
+                        <button type="submit" name="startVM" id="startVM" ><i class="fa fa-arrow-right"></i> Start</button><br/>
+                        <button type="submit" name="stopVM" id="stopVM"  ><i class="fa fa-power-off"></i> Power Off</button><br/>
+                        <button type="submit" name="removeVM" id="removeVM" ><i class="fa fa-trash"></i> Remove</button><br/>
+                        <button type="submit" name="cloneVM" id="cloneVM" ><i class="fa fa-copy"></i> Clone</button><br/>
 
                         
                 </form>
@@ -127,14 +129,17 @@
     newDiv.className += "eachVM";
     sel.appendChild(newDiv);
     var label = document.createElement('label');
-    label.className += "red";
     label.innerHTML = allVMs[i];
     var opt = document.createElement('input');
     opt.type="radio";
     opt.name="selectedVM";
     opt.value = allVMs[i];
+    var redcircle = document.createElement('span');
+    redcircle.className += "circle";
+    redcircle.className += " red";
     newDiv.appendChild(opt);
     newDiv.appendChild(label);
+    newDiv.appendChild(redcircle);
     }       
 
     for(var i = 0; i < common.length; i++) {
@@ -142,14 +147,17 @@
     newDiv.className += "eachVM";
     sel.appendChild(newDiv);
     var label = document.createElement('label');
-    label.className += "green";
     label.innerHTML = common[i];
     var opt = document.createElement('input');
     opt.type="radio";
     opt.name="selectedVM";
     opt.value = common[i];
+    var greencircle = document.createElement('span');
+    greencircle.className += "circle";
+    greencircle.className += " green";
     newDiv.appendChild(opt);
     newDiv.appendChild(label);
+    newDiv.appendChild(greencircle);
     }     
 
 </script>

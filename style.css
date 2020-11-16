@@ -36,6 +36,15 @@
 margin-right: 100%;
 
 }
+.circle{
+
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    display: inline-block;
+    margin-top: 0.3em;
+  
+}
 .name{
   color: rgb(6, 94, 97);
   font-weight: bolder;
@@ -59,18 +68,10 @@ margin-right: 100%;
   align-items: left;
 }
 .red{
-  font-weight: normal;
-  background-color: rgba(211, 24, 24, 0.822);
-  color: white;
-  border-radius: 10%;
-  
+  background-color: rgba(211, 24, 24, 0.822); 
 }
 .green{
-  font-weight: normal;
-  background-color: rgb(158, 216, 119);
-  color: white;
-  border-radius: 0.3em;
-  
+  background-color: rgb(158, 216, 119); 
 }
 
 .eachVM{
