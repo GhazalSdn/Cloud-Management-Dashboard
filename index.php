@@ -25,9 +25,7 @@
                 <h2 class="name">
                     VirtualBox Dashboard
                 </h2>
-                <p class="text">
 
-                </p>
                 <p class="text">
                 <form  class="form" method="post">
                         <div id="selectedVM" class="listOfVM"> SELECT VM:  </div>
@@ -37,6 +35,11 @@
                         <button type="submit" name="stopVM" id="stopVM"  ><i class="fa fa-power-off"></i> Power Off</button><br/>
                         <button type="submit" name="removeVM" id="removeVM" ><i class="fa fa-trash"></i> Remove</button><br/>
                         <button type="submit" name="cloneVM" id="cloneVM" ><i class="fa fa-copy"></i> Clone</button><br/>
+                        <button type="submit" name="showInfo" id="showInfo" ><i class="fa fa-info"></i> Show Info</button><br/>
+                        <div><input id="coreNum" type="text" name="coreNum" value="" size="45" maxlength="30" placeholder="Number of CPU cores:" />
+                        <input type="submit" name="setCoreNum" id="setCoreNum" value="Submit" /></div><br/>
+                        <div><input id="memSize" type="text" name="memSize" value="" size="45" maxlength="30" placeholder="Memory size:" />
+                        <input type="submit" name="setMemSize" id="setMemSize" value="Submit" /></div><br/>
 
                         
                 </form>
@@ -50,44 +53,62 @@
 
 
             <div class="content">
-                <h3>
-                Result
-                </h3>
+
                 <p class="text" id="res"><?php
 
                     
                     if(isset($_POST['getVMs'])){
+                        echo '<h3> Result </h3>';
                         $command = $_POST['message'];
                         $vm = $_POST['selectedVM'];
                         $vmUser='vm1';
                         $ip="192.168.1.6";
                         $commandRes=shell_exec("ssh ".$vmUser."@".$ip." ".$command);
-                        echo '<pre>'.$commandRes.'</pre>';
-
+                        echo '<pre class="limited">'.$commandRes.'</pre>';
                     }
 
                     if(isset($_POST['startVM'])) { 
+                        echo '<h3> Result </h3>';
                         $vm = $_POST['selectedVM'];
                         $startVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm '. $vm);
-                        echo '<pre>'.$startVM.'</pre>';
+                        echo '<pre class="limited">'.$startVM.'</pre>';
                         
                     }
                     if(isset($_POST['stopVM'])) { 
                         $vm = $_POST['selectedVM'];
                         $stopVM=shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage controlvm '.$vm.' poweroff');
-                        echo '<pre>'.$stopVM.'</pre>';
                     }
                     if(isset($_POST['cloneVM'])) { 
+                        echo '<h3> Result </h3>';
                         $vm = $_POST['selectedVM'];
-
                         $cloneVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage clonevm '.$vm.' --name clone-'.rand(1,30).$vm.' --register' );
-                        echo '<pre>'.$cloneVM.'</pre>';
+                        echo '<pre class="limited">'.$cloneVM.'</pre>';
                     }
                     if(isset($_POST['removeVM'])) { 
                         $vm = $_POST['selectedVM'];
                         $removeVM= shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage unregistervm --delete '.$vm);
-                        echo '<pre>'.$removeVM.'</pre>';
                     }
+                    if(isset($_POST['setCoreNum'])){
+                        $coreNum = (int)($_POST['coreNum']);
+                        $vm = $_POST['selectedVM'];
+                        $coreCommand=shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage modifyvm "'.$vm.'" --cpus '.$coreNum);
+
+                    }
+                    if(isset($_POST['setMemSize'])){
+                        $memSize = (int)($_POST['memSize']);
+                        $vm = $_POST['selectedVM'];
+                        $memCommand=shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage modifyvm "'.$vm.'" --memory '.$memSize);
+
+                    }
+
+                    if(isset($_POST['showInfo'])){
+                        echo '<h3> Result </h3>';
+                        $vm = $_POST['selectedVM'];
+                        $memCommand=shell_exec('/Applications/VirtualBox.app/Contents/MacOS/VBoxManage showvminfo '.$vm);
+                        echo '<pre class="limited">'.$memCommand.'</pre>';
+                    }
+
+
                     
                     
                     ?></p>
@@ -97,6 +118,7 @@
 
 
         </div>
+
 
         
 

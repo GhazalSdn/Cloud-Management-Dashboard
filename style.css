@@ -61,6 +61,15 @@ margin-right: 100%;
   align-items: left;
   
 }
+.limited{
+  width: 30em; 
+  height: 30em; 
+  overflow-x: auto; 
+  overflow-y: auto; 
+  text-align:justify; 
+
+
+}
 .listOfVM{
   font-weight: bold;
   display: flex;
